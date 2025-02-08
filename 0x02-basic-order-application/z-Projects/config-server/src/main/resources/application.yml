@@ -1,0 +1,17 @@
+server:
+  port: 8888  # Default port for Config Server
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Oluwafisayomi-P-Folaranmi/spring-config  # Your Git repo
+          default-label: main  # Branch name
+  application:
+    name: config-server  # Name of the config server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka  # Register Config Server in Eureka
