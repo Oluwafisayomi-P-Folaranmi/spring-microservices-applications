@@ -1,3 +1,4 @@
+# Eureka Discovery Server (Service Discovery)
 server:
   port: 8761  # Default port for Eureka Server
 

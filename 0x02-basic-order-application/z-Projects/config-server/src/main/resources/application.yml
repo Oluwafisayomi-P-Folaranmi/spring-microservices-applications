@@ -1,3 +1,4 @@
+# Config Server (Externalise Services Configuration)
 server:
   port: 8888  # Default port for Config Server
 
