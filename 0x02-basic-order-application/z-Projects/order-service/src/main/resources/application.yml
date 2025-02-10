@@ -1,13 +1,25 @@
-# Eureka Discovery Client (Service Discovery)
+# Spring Boot Actuator (Monitoring & Health Checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Enable all Actuator endpoints
+
+logging:
+  level:
+    root: WARN  # Set logging level to WARN
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%thread]){cyan} %clr(%logger{36}){magenta} - %msg%n"
+
+# Eureka Discovery Client (Service Discovery and Registry)
 server:
-  port: 8081
+  port: 8082
 
 spring:
   application:
-    name: product-service
+    name: order-service
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-

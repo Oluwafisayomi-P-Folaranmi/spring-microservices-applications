@@ -1,3 +1,16 @@
+# Spring Boot Actuator (Monitoring & Health Checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Enable all Actuator endpoints
+
+logging:
+  level:
+    root: WARN  # Set logging level to WARN
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%thread]){cyan} %clr(%logger{36}){magenta} - %msg%n"
+
 # Config Server (Externalise Services Configuration)
 server:
   port: 8888  # Default port for Config Server

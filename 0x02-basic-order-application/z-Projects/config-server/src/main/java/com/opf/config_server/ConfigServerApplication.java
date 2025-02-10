@@ -16,8 +16,9 @@ public class ConfigServerApplication {
 
 	@Bean
 	public CommandLineRunner commandLineRunner() {
+
 		return runner -> {
-			System.out.println("Welcoming the developer. The application is running");
+			System.out.println("Welcoming the developer. The application is running.");
 		};
 	}
 }

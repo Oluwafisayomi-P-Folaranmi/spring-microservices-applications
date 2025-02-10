@@ -8,7 +8,6 @@ For a basic microservice like the **ProductService**, you typically include thes
 |------------------------------|---------------------------|----------------------------------------------|--------------------------------------|------------|
 | **REST API Development**      | Web                       | Spring Web                                  | `spring-boot-starter-web`          | Build RESTful APIs using Spring MVC |
 | **Monitoring & Health Checks** | Ops                       | Spring Boot Actuator                        | `spring-boot-starter-actuator`     | Monitor application health, metrics, and sessions |
-| **API Gateway**               | Spring Cloud Routing      | Spring Cloud Routing - *Gateway*                                     | `spring-cloud-starter-gateway`     | Route API requests to microservices |
 | **Service Discovery**         | Spring Cloud Discovery    | Spring Cloud Discovery - *Eureka Client*                     | `spring-cloud-starter-netflix-eureka-client` | Register microservices in Eureka for service discovery |
 | **Distributed Configuration** | Spring Cloud Config       | Spring Cloud Config Client                               | `spring-cloud-starter-config`      | Fetch externalized configuration from Config Server |
 
@@ -23,10 +22,10 @@ After adding these dependencies, you must configure your project properly before
 1. **Spring Boot Actuator** (Monitoring & Health Checks):
      + Required Configuration: Enable actuator endpoints in `application.properties` or `application.yml`.
      + **Optional**: Secure actuator endpoints with Spring Security.
-2. **Eureka Discovery Client** (Service Discovery)
+2. **Eureka Discovery Client** (Service Discovery/Registry)
      + Required Configuration: Point the microservice to a Eureka Server.
      + **Note**: You must first set up a Eureka Server before your microservices can register.
-3. **Spring Cloud Config Client** (Externalized Configuration)
+3. **Spring Cloud Config Client** (Externalized Configuration) - Optional for now
      + Required Configuration: Point the microservice to a Spring Cloud Config Server.
      + **Note**: You must first set up a Config Server before this works.
 
@@ -46,21 +45,18 @@ logging:
   pattern:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%thread]){cyan} %clr(%logger{36}){magenta} - %msg%n"
 
-# Eureka Discovery Client (Service Discovery)
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka  # Eureka Server location
-    register-with-eureka: true
-    fetch-registry: true
+# Eureka Discovery Client (Service Discovery and Registry)
+server:
+  port: 8081
 
-# Spring Cloud Config Client (Externalized Configuration)
 spring:
   application:
-    name: product-service  # Define the service name globally
+    name: product-service
 
-  config:
-    import: optional:configserver:http://localhost:8888  # Config Server location
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
 ```
 
 ## Configuration: Spring Boot, Spring Banner, and Loggings
@@ -68,6 +64,9 @@ spring:
 Let's keep these configurations in the `application.properties` file.
 
 ```properties
+# `spring.application.name` is defined globally here.
+spring.application.name=product-service
+
 ######
 ###### SPRING BOOT BANNER, LOGGING CONFIGURATIONS
 ######
@@ -80,5 +79,20 @@ logging.level.root=WARN
 
 # Enable ANSI coloring for the logs
 spring.output.ansi.enabled=ALWAYS
+
+spring.cloud.config.enabled=false
 ```
 
+## Enable Discovery Client in Main Class
+
+Modify `ProductServiceApplication.java`.
+
+```java
+@SpringBootApplication
+@EnableDiscoveryServer  // Enable Eureka Server
+public class ProductServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ProductServiceApplication.class, args);
+    }
+}
+```

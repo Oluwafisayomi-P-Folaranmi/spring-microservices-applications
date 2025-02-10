@@ -21,6 +21,19 @@ Here’s a table including **Spring Boot Actuator** and **Spring Cloud Discovery
 Create `src/main/resources/application.yml` and modify for Eureka Server.
 
 ```yml
+# Spring Boot Actuator (Monitoring & Health Checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Enable all Actuator endpoints
+
+logging:
+  level:
+    root: WARN  # Set logging level to WARN
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%thread]){cyan} %clr(%logger{36}){magenta} - %msg%n"
+
 # Eureka Discovery Server (Service Discovery)
 server:
   port: 8761  # Default port for Eureka Server
@@ -36,6 +49,8 @@ eureka:
 Let's modify the configuration for the spring banner and the logging in the `application.properties` file.
 
 ```properties
+spring.application.name=eureka-server
+
 ######
 ###### SPRING BOOT BANNER, LOGGING CONFIGURATIONS
 ######
@@ -55,12 +70,6 @@ spring.output.ansi.enabled=ALWAYS
 Modify `EurekaServerApplication.java`.
 
 ```java
-package com.example.eurekaserver;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
-
 @SpringBootApplication
 @EnableEurekaServer  // Enable Eureka Server
 public class EurekaServerApplication {
@@ -77,4 +86,4 @@ When running the system of microservices, the central service registry is ran fi
 - Run the application (`EurekaServerApplication`).
 - Open **`http://localhost:8761`** → You should see the Eureka Dashboard. ✅
 
-Alright. We are done setting up the Eureka server. Let's move on to setting up the external configuration for microservices, Config server.
+Alright. We are done setting up the Eureka server. Let's move on to setting up the external configuration for microservices, Config server. ✅

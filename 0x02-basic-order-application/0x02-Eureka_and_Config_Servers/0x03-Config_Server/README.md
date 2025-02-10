@@ -21,6 +21,20 @@ Here’s the **new table** including **Spring Boot Actuator** and **Spring Cloud
 Create and modify `src/main/resources/application.yml` for Config Server
 
 ```yml
+# Spring Boot Actuator (Monitoring & Health Checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Enable all Actuator endpoints
+
+logging:
+  level:
+    root: WARN  # Set logging level to WARN
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%thread]){cyan} %clr(%logger{36}){magenta} - %msg%n"
+
+# Config Server (Externalise Services Configuration)
 server:
   port: 8888  # Default port for Config Server
 
@@ -29,7 +43,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/your-repo/spring-config  # Replace with your Git repo
+          uri: https://github.com/Oluwafisayomi-P-Folaranmi/spring-config  # Your Git repo
           default-label: main  # Branch name
   application:
     name: config-server  # Name of the config server
@@ -45,6 +59,8 @@ eureka:
 Let's modify the configuration for the spring banner and the logging in the `application.properties` file.
 
 ```properties
+spring.application.name=config-server
+
 ######
 ###### SPRING BOOT BANNER, LOGGING CONFIGURATIONS
 ######
@@ -64,12 +80,6 @@ spring.output.ansi.enabled=ALWAYS
 Modify `ConfigServerApplication.java`
 
 ```java
-package com.example.configserver;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.config.server.EnableConfigServer;
-
 @SpringBootApplication
 @EnableConfigServer  // Enable Config Server
 public class ConfigServerApplication {
