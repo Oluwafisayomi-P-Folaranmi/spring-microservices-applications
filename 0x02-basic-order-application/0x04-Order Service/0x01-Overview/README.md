@@ -6,3 +6,5 @@ Let's discuss how another service, an Order Service, say `OrderService` can comm
 - **Order Service**: Handles customer orders, which includes creating orders, checking product availability, and reducing product inventory.
 
 By using **RESTful APIs** or **Feign clients**, the `OrderService` can efficiently communicate with the `ProductService` to check product availability and update inventory when creating orders. This setup helps maintain a loosely coupled and scalable microservices architecture.
+
+Let's set up the `OrderServive` first so as to be in the Eureka registry. Afterwards, we will then maake it a client of  `ProductService`.
