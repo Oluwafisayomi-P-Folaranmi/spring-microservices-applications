@@ -23,7 +23,7 @@ Each of these services performs a specific function, and they work together to d
 
 ## Service Discovery
 
-At this point, we will set up a ***service discovery*** using Netflix Eureka. Service discovery is a key concept in microservices architecture. It refers to the process of automatically detecting and keeping track of the network locations of service instances, and ensuring that services can find and communicate with each other efficiently.
+At this point, we will set up a ***service discovery*** using Netflix Eureka. ***Service discovery is a key concept in microservices architecture. It refers to the process of automatically detecting and keeping track of the network locations of service instances, and ensuring that services can find and communicate with each other efficiently***.
 
 ### Why Service Discovery is Important:
 
