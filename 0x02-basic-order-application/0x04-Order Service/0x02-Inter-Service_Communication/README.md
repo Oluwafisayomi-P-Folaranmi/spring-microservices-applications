@@ -1,21 +1,12 @@
 # Inter-Service Communication
 
-Now, let's create another service **Order Service** that communicates with **Product Service**.
+We have created the second service, `OrderService`. Now, let's make `OrderService` communicate with `ProductService`.
 
-## Create a Spring Project
+## Feign Client
 
-Create a new Spring Project, name `order-service`. Aside the necessary dependencies for a microservice application, another dependency will be required. The dependency is **Feign Client**.
+**Feign Client** is a declarative web service client that simplifies the process of creating HTTP clients in microservice architectures.
 
-For a basic microservice like the **ProductService**, you typically include the necessary starters and the **Feign Client** starter.:
-
-| **Feature**                  | **Category**               | **Exact Dependency Name on start.spring.io** | **Spring Boot Starter / Dependency** | **Purpose** |
-|------------------------------|---------------------------|----------------------------------------------|--------------------------------------|------------|
-| **REST API Development**      | Web                       | Spring Web                                  | `spring-boot-starter-web`          | Build RESTful APIs using Spring MVC |
-| **Monitoring & Health Checks** | Ops                       | Spring Boot Actuator                        | `spring-boot-starter-actuator`     | Monitor application health, metrics, and sessions |
-| **API Gateway**               | Spring Cloud Routing      | Spring Cloud Routing - *Gateway*                                     | `spring-cloud-starter-gateway`     | Route API requests to microservices |
-| **Service Discovery**         | Spring Cloud Discovery    | Spring Cloud Discovery - *Eureka Client*                     | `spring-cloud-starter-netflix-eureka-client` | Register microservices in Eureka for service discovery |
-| **Distributed Configuration** | Spring Cloud Config       | Spring Cloud Config Client                               | `spring-cloud-starter-config`      | Fetch externalized configuration from Config Server |
-| **OpenFeign (Declarative REST Client)** | Spring Cloud Routing | OpenFeign | `spring-cloud-starter-openfeign` | Simplifies HTTP client calls between microservices by providing a declarative REST client. |
+Developed by **Netflix**, ***Feign allows developers to define the structure of web requests through annotated Java interfaces, reducing boilerplate code and enhancing readability***. By integrating with popular frameworks like Spring Cloud, Feign makes it easy to invoke RESTful services, handle request parameters, headers, and even provide custom configurations. Its seamless integration with service discovery and load balancing tools further enables efficient communication between microservices.
 
 ## Enable Feign Client in Main Class
 
@@ -42,29 +33,29 @@ Creating this logic conceptually:
 Create a Feign client that `OrderService` will use to call `ProductService`. The Feign client is annotated with the name of the api, here `ProductService` that we want it to call, here `product-service` as in the configuration. Let's say `product-service` is base URL of the `ProductService` API.
 
 ```java
-@FeignClient(name = "product-service")
+@FeignClient(name = "product-service", url = "http://localhost:8081")
 public interface ProductClient {
 
-    @GetMapping("/api/products/{id}")
-    String getProduct(@PathVariable String id);
+    @GetMapping("/api/products")
+    String getProduct(@RequestParam String id);
 }
 ```
 
-Then we can use this to access the API.
+Then we can use a **REST controller** to access the API.
 
 ```java
 @RestController
 @RequestMapping("/api")
-public OrderController {
+public class RESTController {
 
-    @AutoWired
+    @Autowired
     ProductClient productClient;
 
-    @GetMapping("/{id}")
-    public String getOrderDetails(@PathVariable String id) {
+    @GetMapping("/orders")
+    public ResponseEntity<?> getOrderDetails(@RequestParam("id") String id) {
         String productDetails = productClient.getProduct(id);
 
-        return "Order placed for: " + productDetails;
+        return new ResponseEntity<>("Order placed for: " + productDetails, HttpStatus.OK);
     }
 }
 ```
