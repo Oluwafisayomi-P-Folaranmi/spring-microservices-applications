@@ -1,0 +1,36 @@
+# Spring Boot Actuator (Monitoring & Health Checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Enable all Actuator endpoints
+
+logging:
+  level:
+    root: WARN  # Set logging level to WARN
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%-5level) %clr([%thread]){cyan} %clr(%logger{36}){magenta} - %msg%n"
+
+# API Gateway service
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/products/**
+        - id: order-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/orders/**
